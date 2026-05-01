@@ -1,214 +1,423 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Mi Universo</title>
-<style>
-    html, body{
-        margin:0;
-        padding:0;
-        overflow:hidden;
-        background:black;
-        font-family: 'Georgia', serif;
-        color:white;
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+  <title>1 de Mayo \u2014 Mi Universo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red:      #c0392b;
+      --red-glow: #e74c3c;
+      --red-dim:  #8b1a1a;
+      --black:    #050508;
     }
 
-    .screen{
-        position:absolute;
-        width:100%;
-        height:100%;
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        flex-direction:column;
-        text-align:center;
-        transition:opacity 1.2s ease;
-        padding:20px;
-        box-sizing:border-box;
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: var(--black);
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
     }
 
-    #welcome h1{
-        color:#ff3b3b;
-        letter-spacing:6px;
-        font-size:38px;
-        margin-bottom:20px;
-        text-shadow:0 0 12px #ff3b3b;
-        animation:fadeIn 2s ease;
+    /* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 ESCENA 1 \u2014 BIENVENIDA \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */
+    #scene1 {
+      position: fixed; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: var(--black);
+      z-index: 10; padding: 2.2rem;
+      transition: opacity 1s ease;
+    }
+    #scene1.out { opacity: 0; pointer-events: none; }
+
+    /* Part\u00edculas */
+    #s1-particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+    .ptcl {
+      position: absolute; border-radius: 50%;
+      background: radial-gradient(circle, rgba(192,57,43,0.55), transparent 70%);
+      animation: ptclRise linear infinite;
+    }
+    @keyframes ptclRise {
+      0%   { transform: translateY(105vh) scale(0); opacity: 0; }
+      8%   { opacity: 1; }
+      92%  { opacity: 0.35; }
+      100% { transform: translateY(-15vh) scale(1); opacity: 0; }
     }
 
-    #welcome p{
-        font-size:18px;
-        max-width:90%;
-        line-height:1.6;
-        opacity:0.9;
-        animation:fadeIn 3s ease;
+    /* L\u00ednea vertical decorativa */
+    .s1-vline {
+      width: 1px; height: 55px;
+      background: linear-gradient(to bottom, transparent, var(--red-dim), transparent);
+      margin-bottom: 2.4rem;
+      animation: risingFade 1.8s ease forwards; opacity: 0;
     }
 
-    button{
-        margin-top:40px;
-        padding:12px 30px;
-        background:transparent;
-        border:1px solid #ff3b3b;
-        color:#ff3b3b;
-        font-size:16px;
-        letter-spacing:2px;
-        cursor:pointer;
-        transition:0.4s;
+    /* Fecha */
+    .s1-date {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 13vw, 5.2rem);
+      font-weight: 700; letter-spacing: 0.2em;
+      color: var(--red-glow);
+      text-shadow:
+        0 0 18px rgba(231,76,60,0.55),
+        0 0 55px rgba(192,57,43,0.28),
+        0 0 110px rgba(192,57,43,0.1);
+      animation: risingFade 1.2s ease 0.3s forwards; opacity: 0;
+      text-align: center;
     }
 
-    button:hover{
-        background:#ff3b3b;
-        color:black;
+    /* Divisor */
+    .s1-div {
+      width: 38px; height: 1px;
+      background: var(--red-dim); margin: 1.7rem auto;
+      animation: risingFade 1.2s ease 0.7s forwards; opacity: 0;
     }
 
-    #universe{
-        opacity:0;
-        pointer-events:none;
+    /* Texto rom\u00e1ntico */
+    .s1-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-weight: 300;
+      font-size: clamp(0.98rem, 4.4vw, 1.3rem);
+      color: rgba(245,240,235,0.76);
+      line-height: 1.85; text-align: center; max-width: 310px;
+      letter-spacing: 0.02em;
+      animation: risingFade 1.2s ease 1s forwards; opacity: 0;
     }
 
-    canvas{
-        position:absolute;
-        top:0;
-        left:0;
+    /* Bot\u00f3n */
+    .s1-btn {
+      margin-top: 3.2rem; padding: 0.88rem 2.3rem;
+      border: 1px solid var(--red-dim); background: transparent;
+      color: var(--red-glow);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.82rem; letter-spacing: 0.26em; text-transform: uppercase;
+      cursor: pointer; position: relative; overflow: hidden;
+      animation: risingFade 1.2s ease 1.4s forwards, btnPulse 3s ease 2s infinite;
+      opacity: 0;
+    }
+    .s1-btn::before {
+      content: ''; position: absolute; inset: 0;
+      background: var(--red);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .s1-btn:active::before, .s1-btn:hover::before { transform: scaleX(1); }
+    .s1-btn span { position: relative; z-index: 1; transition: color 0.4s; }
+    .s1-btn:active span, .s1-btn:hover span { color: var(--black); }
+
+    @keyframes risingFade {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes btnPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(192,57,43,0); }
+      50%       { box-shadow: 0 0 16px 2px rgba(192,57,43,0.28); }
     }
 
-    @keyframes fadeIn{
-        from{opacity:0; transform:translateY(20px);}
-        to{opacity:1; transform:translateY(0);}
+    /* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 OVERLAY NEGRO \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */
+    #overlay {
+      position: fixed; inset: 0; background: #000;
+      z-index: 20; opacity: 0; pointer-events: none;
+      transition: opacity 0.55s ease;
     }
-</style>
+    #overlay.on { opacity: 1; pointer-events: all; }
+
+    /* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 ESCENA 2 \u2014 GALAXIA \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */
+    #scene2 {
+      position: fixed; inset: 0;
+      z-index: 5; opacity: 0;
+      transition: opacity 0.9s ease;
+    }
+    #scene2.on { opacity: 1; }
+
+    #c {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      touch-action: none;
+    }
+
+    /* Vi\u00f1eta radial */
+    #scene2::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, transparent 30%, rgba(5,5,8,0.82) 100%);
+      pointer-events: none; z-index: 2;
+    }
+
+    /* Hint */
+    #hint {
+      position: absolute; bottom: 2rem; left: 0; right: 0;
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 0.7rem;
+      letter-spacing: 0.24em; color: rgba(245,240,235,0.16);
+      z-index: 3; animation: hPulse 4.5s ease infinite;
+    }
+    @keyframes hPulse {
+      0%, 100% { opacity: 0.1; }
+      50%       { opacity: 0.38; }
+    }
+  </style>
 </head>
 <body>
 
-<div id="welcome" class="screen">
-    <h1>1 DE MAYO</h1>
-    <p>Hoy comienza un nuevo mes, y mi mayor motivo para sonreír es haberte conocido.</p>
-    <button onclick="enterUniverse()">ENTRAR AL UNIVERSO</button>
+<div id="overlay"></div>
+
+<!-- \u2550\u2550 ESCENA 1 \u2550\u2550 -->
+<div id="scene1">
+  <div id="s1-particles"></div>
+  <div class="s1-vline"></div>
+  <h1 class="s1-date">1 de Mayo</h1>
+  <div class="s1-div"></div>
+  <p class="s1-text">
+    Hoy comienza un nuevo mes,<br>
+    y mi mayor motivo para sonre\u00edr<br>
+    es haberte conocido.
+  </p>
+  <button class="s1-btn" id="enterBtn"><span>Entrar al universo</span></button>
 </div>
 
-<div id="universe" class="screen">
-    <canvas id="space"></canvas>
+<!-- \u2550\u2550 ESCENA 2 \u2550\u2550 -->
+<div id="scene2">
+  <canvas id="c"></canvas>
+  <div id="hint">arrastra para explorar \u00b7 gira el planeta con el dedo \u2726</div>
 </div>
 
 <script>
-const welcome = document.getElementById('welcome');
-const universe = document.getElementById('universe');
-const canvas = document.getElementById('space');
-const ctx = canvas.getContext('2d');
+/* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+   PART\u00cdCULAS ESCENA 1
+\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */
+(function(){
+  const ct = document.getElementById('s1-particles');
+  for(let i=0;i<22;i++){
+    const p=document.createElement('div'); p.className='ptcl';
+    const s=Math.random()*95+18;
+    p.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;
+      animation-duration:${Math.random()*14+9}s;
+      animation-delay:${Math.random()*-24}s;
+      opacity:0;filter:blur(${Math.random()*15+4}px);`;
+    ct.appendChild(p);
+  }
+})();
 
-let W, H;
-function resize(){
-    W = canvas.width = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-}
-window.addEventListener('resize', resize);
-resize();
+/* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+   TRANSICI\u00d3N
+\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */
+document.getElementById('enterBtn').addEventListener('click',()=>{
+  const ov=document.getElementById('overlay');
+  ov.classList.add('on');
+  setTimeout(()=>{
+    document.getElementById('scene1').style.display='none';
+    document.getElementById('scene2').classList.add('on');
+    initGalaxy();
+    ov.classList.remove('on');
+  },700);
+});
 
-function enterUniverse(){
-    welcome.style.opacity = "0";
-    setTimeout(()=>{
-        welcome.style.display="none";
-        universe.style.opacity="1";
-        universe.style.pointerEvents="auto";
-        startUniverse();
-    },1200);
-}
+/* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+   GALAXIA FUSIONADA
+   \u2013 Pan libre (como el c\u00f3digo original)
+   \u2013 \u00d3rbita 360\u00b0 autom\u00e1tica + t\u00e1ctil en el planeta
+   \u2013 Est\u00e9tica premium con glow, tipograf\u00eda serif, colores
+\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */
+function initGalaxy(){
+  const canvas=document.getElementById('c');
+  const ctx=canvas.getContext('2d');
 
-// ESTRELLAS
-let stars = [];
-for(let i=0;i<200;i++){
-    stars.push({
-        x: Math.random()*W*3 - W,
-        y: Math.random()*H*3 - H,
-        size: Math.random()*2,
-        depth: Math.random()*2+0.5
-    });
-}
+  let W,H;
+  function resize(){ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; }
+  window.addEventListener('resize',resize); resize();
 
-// FRASES
-const phrases = [
-"Te amo ❤️","Eres única ✨","Mi luz ⭐","Mi razón 🥰",
-"Mi alegría 💖","Te cuido 🧸","Mi universo 🌌",
-"Eres fuego 🔥","Mi paz 🌙","Mi felicidad 💫"
-];
+  /* \u2500\u2500\u2500 UNIVERSO PALABRAS \u2014 lista extensa y rom\u00e1ntica \u2500\u2500\u2500 */
+  const ALL_PHRASES = [
+    // \u2764 Amor profundo
+    { t:'Te amo \u2764\ufe0f',             c:'#e74c3c' },
+    { t:'Te amo m\u00e1s cada d\u00eda \ud83d\udc93', c:'#e74c3c' },
+    { t:'Eres mi amor \u2764',        c:'#e74c3c' },
+    { t:'Amor eterno \ud83d\udc9e',         c:'#e86070' },
+    { t:'Mi coraz\u00f3n \ud83d\udc97',          c:'#f08090' },
+    { t:'Mi gran amor \ud83c\udf39',        c:'#e85060' },
+    { t:'Infinitamente tuya \ud83d\udc98',  c:'#e874b0' },
+    // \u2728 Admiraci\u00f3n
+    { t:'Eres \u00fanica \u2728',           c:'#f5f0eb' },
+    { t:'Irrepetible \ud83c\udf3a',         c:'#f8b0a0' },
+    { t:'Extraordinaria \ud83e\udd8b',      c:'#d0a8f8' },
+    { t:'Invaluable \ud83d\udc8e',          c:'#78d0f8' },
+    { t:'Impresionante \ud83c\udf20',       c:'#90b8f8' },
+    { t:'Eres arte \ud83c\udfa8',           c:'#d080f0' },
+    { t:'Eres perfecta \ud83c\udf38',       c:'#f8b0c8' },
+    { t:'Tan hermosa \ud83c\udf37',         c:'#f8a8c8' },
+    { t:'Sublime \u2726',              c:'#ffffff' },
+    // \ud83c\udf1f Luz y universo
+    { t:'Mi luz \u2b50',              c:'#f0d070' },
+    { t:'Mi estrella \ud83c\udf1f',         c:'#f8e080' },
+    { t:'Mi universo \ud83c\udf0c',         c:'#8090d8' },
+    { t:'Mi cosmos \ud83e\ude90',           c:'#a090e8' },
+    { t:'Mi galaxia \ud83d\udd2d',          c:'#7880d0' },
+    { t:'Mi cielo \ud83c\udf19',            c:'#a0b8f8' },
+    { t:'Mi sol \u2600\ufe0f',              c:'#f8d060' },
+    { t:'Mi luna \ud83c\udf1b',             c:'#d0d8f8' },
+    // \ud83e\udd70 Ternura
+    { t:'Mi raz\u00f3n \ud83e\udd70',            c:'#e8a090' },
+    { t:'Mi alegr\u00eda \ud83d\udc96',          c:'#e74c3c' },
+    { t:'Mi sonrisa \ud83d\ude0a',          c:'#f8c870' },
+    { t:'Mi dulzura \ud83c\udf6f',          c:'#f0c060' },
+    { t:'Te cuido \ud83e\uddf8',            c:'#d4a0b0' },
+    { t:'Mi ternura \ud83c\udf3c',          c:'#f0d8a0' },
+    { t:'Tan tierna \ud83d\udc3e',          c:'#e8b8c8' },
+    // \ud83d\udd25 Pasi\u00f3n
+    { t:'Eres fuego \ud83d\udd25',          c:'#e8602c' },
+    { t:'Me enciendes \ud83d\udd6f\ufe0f',       c:'#f09040' },
+    { t:'Eres magia \ud83e\ude84',          c:'#c070d8' },
+    { t:'Eres pura magia \u2728',     c:'#d090e8' },
+    { t:'Me hechizas \ud83d\udc9c',         c:'#c060d0' },
+    // \ud83c\udfe1 Hogar y paz
+    { t:'Mi hogar \ud83c\udfe1',            c:'#e8c870' },
+    { t:'Mi refugio \ud83c\udf0a',          c:'#70c8e8' },
+    { t:'Mi calma \ud83d\udd4a\ufe0f',           c:'#90d0c8' },
+    { t:'Mi paz \ud83c\udf3f',              c:'#80d0a0' },
+    { t:'Mi descanso \ud83c\udf38',         c:'#f0c8d8' },
+    { t:'Donde pertenezco \ud83e\udec2',    c:'#e0c0b0' },
+    // \ud83d\udcab Promesas y tiempo
+    { t:'Siempre \ud83e\udd0d',             c:'#f5f0eb' },
+    { t:'Eternamente \ud83c\udf20',         c:'#90b8f8' },
+    { t:'Para siempre \ud83d\udcab',        c:'#c0b870' },
+    { t:'Cada d\u00eda m\u00e1s \ud83d\udcc5',        c:'#a8d8a8' },
+    { t:'El resto de mi vida \ud83c\udf39', c:'#e86080' },
+    { t:'Hasta el infinito \u267e\ufe0f',   c:'#8090d8' },
+    // \ud83c\udf3a Poes\u00eda
+    { t:'Mi todo \ud83d\udcab',             c:'#c0b870' },
+    { t:'Mi vida \ud83c\udf39',             c:'#f0a090' },
+    { t:'Mi poema \ud83d\udcd6',            c:'#f0d090' },
+    { t:'Mi canci\u00f3n \ud83c\udfb5',          c:'#f0b8d0' },
+    { t:'Mi historia \ud83d\udcdc',         c:'#d8c0a0' },
+    { t:'Mi sue\u00f1o \ud83d\udcad',            c:'#b0c0f8' },
+    { t:'Mi fuerza \ud83d\udcaa\ud83c\udffb',          c:'#e8d080' },
+    { t:'Mi motivo \ud83c\udf3a',           c:'#f0a0b0' },
+    { t:'Mi orgullo \ud83c\udfc6',          c:'#f0d060' },
+    { t:'Mi aventura \ud83d\uddfa\ufe0f',        c:'#a0d0c0' },
+    { t:'Mi presente \ud83c\udf81',         c:'#f0b060' },
+    { t:'Mi futuro \ud83c\udf05',           c:'#f0c880' },
+    { t:'Me completas \ud83e\udde9',        c:'#d0c8f8' },
+    { t:'Eres todo \u2726',            c:'#ffffff' },
+  ];
 
-let texts = [];
-for(let i=0;i<40;i++){
+  /* \u2500\u2500\u2500 ESTRELLAS dispersas por la galaxia \u2500\u2500\u2500 */
+  const GALAXY_SIZE = 4000;  // espacio virtual total
+  const stars = Array.from({length:400},()=>({
+    x: Math.random()*GALAXY_SIZE - GALAXY_SIZE/2,
+    y: Math.random()*GALAXY_SIZE - GALAXY_SIZE/2,
+    r: Math.random()*1.6+0.12,
+    a: Math.random()*0.65+0.35,
+    twS: Math.random()*0.02+0.004,
+    twO: Math.random()*Math.PI*2,
+    depth: Math.random()*0.7+0.3,  // parallax al hacer pan
+  }));
+
+  /* \u2500\u2500\u2500 TEXTOS dispersos por toda la galaxia \u2500\u2500\u2500 */
+  // Instancias: algunas palabras aparecen varias veces en distintos lugares
+  const texts = [];
+  const INSTANCES = 90;  // total de palabras en el espacio
+  for(let i=0;i<INSTANCES;i++){
+    const p = ALL_PHRASES[Math.floor(Math.random()*ALL_PHRASES.length)];
     texts.push({
-        x: Math.random()*W*3 - W,
-        y: Math.random()*H*3 - H,
-        text: phrases[Math.floor(Math.random()*phrases.length)],
-        size: 16 + Math.random()*10,
-        depth: Math.random()*2+0.5
+      x:    Math.random()*GALAXY_SIZE - GALAXY_SIZE/2,
+      y:    Math.random()*GALAXY_SIZE - GALAXY_SIZE/2,
+      text: p.t,
+      color:p.c,
+      size: 11 + Math.random()*9,
+      depth:Math.random()*0.6+0.25,
+      floatAmp: Math.random()*9+3,
+      floatSpd: Math.random()*0.0012+0.0003,
+      floatOff: Math.random()*Math.PI*2,
+      glowI:    Math.random()*0.35+0.65,
+      glowSpd:  Math.random()*0.004+0.002,
+      glowOff:  Math.random()*Math.PI*2,
     });
-}
+  }
 
-// PLANETA
-function drawPlanet(cx, cy){
-    ctx.beginPath();
-    ctx.fillStyle="#111";
-    ctx.arc(cx, cy, 60, 0, Math.PI*2);
-    ctx.fill();
+  /* \u2500\u2500\u2500 PALABRAS EN \u00d3RBITA alrededor del planeta \u2500\u2500\u2500 */
+  const ORBIT_WORDS = [
+    // \u00d3rbita 0 \u2014 radio 115
+    { t:'Te amo \u2764\ufe0f',        c:'#e74c3c', r:115, sm:1.5 },
+    { t:'Mi vida \ud83c\udf39',        c:'#f0a090', r:115, sm:1.5 },
+    { t:'Siempre \ud83e\udd0d',        c:'#f5f0eb', r:115, sm:1.5 },
+    { t:'Mi cielo \ud83c\udf19',       c:'#a0b8f8', r:115, sm:1.5 },
+    { t:'Mi sol \u2600\ufe0f',         c:'#f8d060', r:115, sm:1.5 },
+    // \u00d3rbita 1 \u2014 radio 200
+    { t:'Eres \u00fanica \u2728',      c:'#f5f0eb', r:200, sm:1.0 },
+    { t:'Mi luz \u2b50',          c:'#f0d070', r:200, sm:1.0 },
+    { t:'Mi raz\u00f3n \ud83e\udd70',        c:'#e8a090', r:200, sm:1.0 },
+    { t:'Mi alegr\u00eda \ud83d\udc96',      c:'#e74c3c', r:200, sm:1.0 },
+    { t:'Mi universo \ud83c\udf0c',     c:'#8090d8', r:200, sm:1.0 },
+    { t:'Te cuido \ud83e\uddf8',        c:'#d4a0b0', r:200, sm:1.0 },
+    { t:'Mi paz \ud83c\udf3f',          c:'#80d0a0', r:200, sm:1.0 },
+    // \u00d3rbita 2 \u2014 radio 295
+    { t:'Eres fuego \ud83d\udd25',      c:'#e8602c', r:295, sm:0.7 },
+    { t:'Mi todo \ud83d\udcab',         c:'#c0b870', r:295, sm:0.7 },
+    { t:'Eres magia \ud83e\ude84',      c:'#c070d8', r:295, sm:0.7 },
+    { t:'Mi calma \ud83d\udd4a\ufe0f',       c:'#90d0c8', r:295, sm:0.7 },
+    { t:'Eres perfecta \ud83d\udc8e',   c:'#78d0f8', r:295, sm:0.7 },
+    { t:'Mi hogar \ud83c\udfe1',        c:'#e8c870', r:295, sm:0.7 },
+    { t:'Invaluable \ud83c\udf3a',      c:'#f8b0a0', r:295, sm:0.7 },
+    { t:'Eres arte \ud83c\udfa8',       c:'#d080f0', r:295, sm:0.7 },
+    // \u00d3rbita 3 \u2014 radio 400
+    { t:'Infinitamente \ud83d\udc9e',   c:'#e874c0', r:400, sm:0.46},
+    { t:'Irrepetible \ud83c\udf20',     c:'#90b8f8', r:400, sm:0.46},
+    { t:'Mi coraz\u00f3n \ud83d\udc93',      c:'#e74c3c', r:400, sm:0.46},
+    { t:'Mi poema \ud83d\udcd6',        c:'#f0d090', r:400, sm:0.46},
+    { t:'Eres todo \u2726',        c:'#ffffff', r:400, sm:0.46},
+    { t:'Eternamente \ud83c\udf38',     c:'#f8b0c8', r:400, sm:0.46},
+    { t:'Mi sue\u00f1o \ud83d\udcad',        c:'#b0c0f8', r:400, sm:0.46},
+    { t:'Mi refugio \ud83c\udf0a',      c:'#70c8e8', r:400, sm:0.46},
+    { t:'Tan hermosa \ud83c\udf37',     c:'#f8a8c8', r:400, sm:0.46},
+    { t:'Mi fuerza \ud83d\udcaa\ud83c\udffb',      c:'#e8d080', r:400, sm:0.46},
+  ];
 
-    ctx.strokeStyle="#ff3b3b";
-    ctx.lineWidth=3;
-    ctx.beginPath();
-    ctx.ellipse(cx, cy, 100, 30, 0, 0, Math.PI*2);
-    ctx.stroke();
-}
+  // Distribuir uniformemente por \u00f3rbita
+  const oCount={}; ORBIT_WORDS.forEach(w=>oCount[w.r]=(oCount[w.r]||0)+1);
+  const oIdx={};
+  const orbitObjs = ORBIT_WORDS.map(w=>{
+    oIdx[w.r]=oIdx[w.r]||0;
+    const idx=oIdx[w.r]++; const total=oCount[w.r];
+    const baseAngle=(idx/total)*Math.PI*2;
+    const tilt=0.26+Math.random()*0.12;
+    return {
+      text:w.t, color:w.c, orbitR:w.r, speedMult:w.sm,
+      baseAngle, tilt,
+      floatAmp:Math.random()*9+3,
+      floatSpd:Math.random()*0.0012+0.0003,
+      floatOff:Math.random()*Math.PI*2,
+      glowI:   Math.random()*0.3+0.7,
+      glowSpd: Math.random()*0.004+0.002,
+      glowOff: Math.random()*Math.PI*2,
+      fontSize:Math.random()*5+10,
+    };
+  });
 
-// MOVIMIENTO TÁCTIL
-let offsetX=0, offsetY=0;
-let startX=0, startY=0;
-let dragging=false;
+  /* \u2500\u2500\u2500 Estado de interacci\u00f3n \u2500\u2500\u2500 */
+  // PAN (explorar la galaxia)
+  let panX=0, panY=0, panVelX=0, panVelY=0;
+  // ORBIT (girar el planeta)
+  let orbitAngle=0;
+  const AUTO_SPIN=0.0007;
+  let spinVel=0;
 
-canvas.addEventListener('touchstart', e=>{
-    dragging=true;
-    startX=e.touches[0].clientX;
-    startY=e.touches[0].clientY;
-});
+  let isDragging=false;
+  let lastX=0, lastY=0;
+  let dragDX=0;  // para calcular si es m\u00e1s giro u pan
 
-canvas.addEventListener('touchmove', e=>{
-    if(!dragging) return;
-    let dx=e.touches[0].clientX-startX;
-    let dy=e.touches[0].clientY-startY;
-    offsetX+=dx*0.5;
-    offsetY+=dy*0.5;
-    startX=e.touches[0].clientX;
-    startY=e.touches[0].clientY;
-});
+  canvas.addEventListener('touchstart',e=>{
+    isDragging=true;
+    lastX=e.touches[0].clientX;
+    lastY=e.touches[0].clientY;
+    panVelX=panVelY=spinVel=0;
+    e.preventDefault();
+  },{passive:false});
 
-canvas.addEventListener('touchend', ()=>dragging=false);
-
-// ANIMACIÓN
-function startUniverse(){
-    function animate(){
-        ctx.clearRect(0,0,W,H);
-
-        // estrellas
-        stars.forEach(s=>{
-            ctx.fillStyle="white";
-            ctx.globalAlpha=0.8;
-            ctx.fillRect(s.x + offsetX*s.depth, s.y + offsetY*s.depth, s.size, s.size);
-        });
-
-        // planeta
-        drawPlanet(W/2 + offsetX*0.2, H/2 + offsetY*0.2);
-
-        // textos
-        texts.forEach(t=>{
-            ctx.fillStyle="white";
-            ctx.font = t.size+"px Arial";
-            ctx.globalAlpha=0.9;
-            ctx.fillText(t.text, t.x + offsetX*t.depth, t.y + offsetY*t.depth);
-        });
-
-        requestAnimationFrame(animate);
-    }
-    animate();
-}
-</script>
-
-</body>
-</html>
+  canvas.addEventListener('touchmove',e=>{
+    if(!isDragging)return;
+    const dx
